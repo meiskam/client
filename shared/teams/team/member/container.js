@@ -1,18 +1,18 @@
 // @flow
 import * as Types from '../../../constants/types/teams'
-import {amIBeingFollowed, amIFollowing} from '../../../constants/selectors'
+import { amIBeingFollowed, amIFollowing } from '../../../constants/selectors'
 import * as I from 'immutable'
-import {connect} from 'react-redux'
-import {compose} from 'recompose'
-import {HeaderHoc} from '../../../common-adapters'
-import {createShowUserProfile} from '../../../actions/profile-gen'
-import {createGetProfile} from '../../../actions/tracker-gen'
-import {createStartConversation} from '../../../actions/chat-gen'
-import {isMobile} from '../../../constants/platform'
-import {TeamMember} from '.'
-import {type TypedState} from '../../../constants/reducer'
-import {getCanPerform} from '../../../constants/teams'
-import * as RPCTypes from '../../../constants/types/flow-types'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
+import { HeaderHoc } from '../../../common-adapters'
+import { createShowUserProfile } from '../../../actions/profile-gen'
+import { createGetProfile } from '../../../actions/tracker-gen'
+import { createStartConversation } from '../../../actions/chat-gen'
+import { isMobile } from '../../../constants/platform'
+import { TeamMember } from '.'
+import { type TypedState } from '../../../constants/reducer'
+import { getCanPerform } from '../../../constants/teams'
+import * as RPCTypes from '../../../constants/types/rpc-gen'
 
 type StateProps = {
   teamname: string,
@@ -25,7 +25,7 @@ type StateProps = {
   loading: boolean,
 }
 
-const mapStateToProps = (state: TypedState, {routeProps}): StateProps => {
+const mapStateToProps = (state: TypedState, { routeProps }): StateProps => {
   const username = routeProps.get('username')
   const teamname = routeProps.get('teamname')
 
@@ -51,31 +51,31 @@ type DispatchProps = {
   // TODO remove member
 }
 
-const mapDispatchToProps = (dispatch: Dispatch, {routeProps, navigateAppend, navigateUp}): DispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch, { routeProps, navigateAppend, navigateUp }): DispatchProps => ({
   onOpenProfile: () => {
     isMobile
-      ? dispatch(createShowUserProfile({username: routeProps.get('username')}))
+      ? dispatch(createShowUserProfile({ username: routeProps.get('username') }))
       : dispatch(
-          createGetProfile({username: routeProps.get('username'), ignoreCache: true, forceDisplay: true})
-        )
+        createGetProfile({ username: routeProps.get('username'), ignoreCache: true, forceDisplay: true })
+      )
   },
   _onEditMembership: (name: string, username: string) =>
     dispatch(
       navigateAppend([
         {
-          props: {teamname: name, username},
+          props: { teamname: name, username },
           selected: 'rolePicker',
         },
       ])
     ),
   _onRemoveMember: (teamname: string, username: string) => {
-    dispatch(navigateAppend([{props: {teamname, username}, selected: 'reallyRemoveMember'}]))
+    dispatch(navigateAppend([{ props: { teamname, username }, selected: 'reallyRemoveMember' }]))
   },
   _onLeaveTeam: (teamname: string) => {
-    dispatch(navigateAppend([{props: {teamname}, selected: 'reallyLeaveTeam'}]))
+    dispatch(navigateAppend([{ props: { teamname }, selected: 'reallyLeaveTeam' }]))
   },
   _onChat: (username, myUsername) => {
-    username && myUsername && dispatch(createStartConversation({users: [username, myUsername]}))
+    username && myUsername && dispatch(createStartConversation({ users: [username, myUsername] }))
   },
   onBack: () => dispatch(navigateUp()),
 })
