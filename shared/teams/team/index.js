@@ -65,7 +65,6 @@ export type Props = {
   you: string,
   yourRole: ?Types.TeamRoleType,
   youAdmin: boolean,
-  youImplicitAdmin: boolean,
   youCanLeaveTeam: boolean,
   yourOperations: RPCTypes.TeamOperation,
 }
@@ -264,7 +263,6 @@ class Team extends React.PureComponent<Props> {
       waitingForSavePublicity,
       yourRole,
       youAdmin,
-      youImplicitAdmin,
       youCanLeaveTeam,
       yourOperations,
     } = this.props
@@ -355,36 +353,34 @@ class Team extends React.PureComponent<Props> {
             flexGrow: 1,
           }}
         >
-          {!youImplicitAdmin && (
-            <Box
-              style={{
-                ...globalStyles.flexBoxRow,
-              }}
-            >
-              <Box style={{...globalStyles.flexBoxColumn, alignItems: 'center'}}>
-                <Checkbox
-                  checked={publicityMember}
-                  disabled={!yourOperations.setTeamShowcase}
-                  label=""
-                  onCheck={setPublicityMember}
-                  style={{paddingRight: globalMargins.xtiny}}
-                />
-              </Box>
-              <Box style={{...globalStyles.flexBoxColumn, flexShrink: 1}}>
-                <Text
-                  style={{color: yourOperations.setTeamShowcase ? globalColors.black_75 : globalColors.grey}}
-                  type="Body"
-                >
-                  Publish team on your own profile
-                </Text>
-                <Text type="BodySmall">
-                  {yourOperations.setTeamShowcase
-                    ? 'Your profile on the Keybase website will mention this team. Description + number of members will be public.'
-                    : "Admins aren't allowing members to publish this team on their profile."}
-                </Text>
-              </Box>
+          <Box
+            style={{
+              ...globalStyles.flexBoxRow,
+            }}
+          >
+            <Box style={{...globalStyles.flexBoxColumn, alignItems: 'center'}}>
+              <Checkbox
+                checked={publicityMember}
+                disabled={!yourOperations.setTeamShowcase}
+                label=""
+                onCheck={setPublicityMember}
+                style={{paddingRight: globalMargins.xtiny}}
+              />
             </Box>
-          )}
+            <Box style={{...globalStyles.flexBoxColumn, flexShrink: 1}}>
+              <Text
+                style={{color: yourOperations.setTeamShowcase ? globalColors.black_75 : globalColors.grey}}
+                type="Body"
+              >
+                Publish team on your own profile
+              </Text>
+              <Text type="BodySmall">
+                {yourOperations.setTeamShowcase
+                  ? 'Your profile on the Keybase website will mention this team. Description + number of members will be public.'
+                  : "Admins aren't allowing members to publish this team on their profile."}
+              </Text>
+            </Box>
+          </Box>
           {youAdmin && (
             <Box style={globalStyles.flexBoxColumn}>
               <Box style={stylesSettingsTabRow}>

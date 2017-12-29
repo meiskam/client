@@ -22,7 +22,6 @@ const order = {owner: 0, admin: 1, writer: 2, reader: 3}
 type StateProps = {
   _invites: I.Set<Types.InviteInfo>,
   _memberInfo: I.Set<Types.MemberInfo>,
-  _implicitAdminUsernames: I.Set<string>,
   _requests: I.Set<Types.RequestInfo>,
   _newTeamRequests: I.List<string>,
   loading: boolean,
@@ -45,13 +44,8 @@ const mapStateToProps = (state: TypedState, {routeProps, routeState}): StateProp
     throw new Error('There was a problem loading the team page, please report this error.')
   }
   const memberInfo = state.entities.getIn(['teams', 'teamNameToMembers', teamname], I.Set())
-  const implicitAdminUsernames = state.entities.getIn(
-    ['teams', 'teamNameToImplicitAdminUsernames', teamname],
-    I.Set()
-  )
   return {
     _memberInfo: memberInfo,
-    _implicitAdminUsernames: implicitAdminUsernames,
     _requests: state.entities.getIn(['teams', 'teamNameToRequests', teamname], I.Set()),
     _invites: state.entities.getIn(['teams', 'teamNameToInvites', teamname], I.Set()),
     description: state.entities.getIn(['teams', 'teamNameToPublicitySettings', teamname, 'description'], ''),
@@ -191,7 +185,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   if (you) {
     // TODO: can we just test stateProps.yourOperations.RenameChannel ?
     youExplicitAdmin = Constants.isOwner(stateProps.yourRole) || Constants.isAdmin(stateProps.yourRole)
-    youImplicitAdmin = stateProps._implicitAdminUsernames.has(you)
     youAreMember = stateProps.yourRole && stateProps.yourRole !== 'none'
   }
   const youAdmin = youExplicitAdmin || youImplicitAdmin
